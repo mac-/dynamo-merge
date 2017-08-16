@@ -10,14 +10,13 @@
     "email": "ilmari.vacklin@iki.fi",
     "url": "https://github.com/wolverian"
   },
-  "files": [
-    "index.js"
-  ],
+  "files": ["index.js"],
   "scripts": {
-    "test": "node test.js"
+    "test": "nyc node test.js"
   },
   "devDependencies": {
     "eslint-config-motley": "^7.2.0",
+    "nyc": "^11.1.0",
     "tape": "^4.6.2"
   }
 }
