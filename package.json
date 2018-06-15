@@ -1,6 +1,6 @@
 {
   "name": "dynamo-merge",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Painlessly update nested DynamoDB objects.",
   "main": "index.js",
   "license": "MIT",
@@ -10,9 +10,7 @@
     "email": "ilmari.vacklin@iki.fi",
     "url": "https://github.com/wolverian"
   },
-  "files": [
-    "index.js"
-  ],
+  "files": ["index.js"],
   "scripts": {
     "test": "node test.js",
     "coverage": "nyc yarn test",
