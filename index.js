@@ -11,7 +11,7 @@ const getNextPrefix = (prefix, val, isFromArray) => {
   }
 
   if (!isFromArray && prefix === "") {
-    return val
+    return `#${val}`
   }
 
   return `${prefix}.${val}`
@@ -43,6 +43,8 @@ const merge = (prefix, updates, accumulator, type, itemIndex = "") => {
       newAcc.removes.push(`${updates}`)
     }
 
+    const namesKey = prefix.replace(/^#([^\.]+).*/, "$1", "")
+    newAcc.attributeNames[`#${namesKey}`] = namesKey
     return newAcc
   }
 
@@ -54,20 +56,18 @@ const merge = (prefix, updates, accumulator, type, itemIndex = "") => {
     const isFromArray = Array.isArray(updates)
     const arr = isFromArray ? updates : Object.keys(updates)
 
-    return arr.reduce((prev, current, currentIndex) => {
+    var z = arr.reduce((prev, current, currentIndex) => {
       const value = isFromArray ? current : updates[current]
       const index = isFromArray ? currentIndex : ""
       return merge(getNextPrefix(prefix, current, isFromArray), value, newAcc, Array.isArray(value) ? "adds" : type, index)
     }, newAcc)
+    return z
   }
 
-  const key = `:${prefix}${itemIndex}`.replace(/\./g, "_")
+  const key = `:${prefix}${itemIndex}`.replace(/\./g, "_").replace(/^\:#/, ":")
   newAcc.params[key] = updates
-  if (typeOfUpdates !== "number" && typeOfUpdates !== "boolean") {
-    newAcc[type].push(`${prefix}${separator}${key}`)
-    return newAcc
-  }
-
+  const namesKey = key.replace(/^\:([^_]+).*/, "$1")
+  newAcc.attributeNames[`#${namesKey}`] = namesKey
   newAcc[type].push(`${prefix}${separator}${key}`)
   return newAcc
 }
@@ -78,8 +78,9 @@ module.exports = (updates) => {
     adds,
     removes,
     deletes,
-    params
-  } = merge("", updates, { sets: [], adds: [], removes: [], deletes: [], params: {} }, "sets")
+    params,
+    attributeNames
+  } = merge("", updates, { sets: [], adds: [], removes: [], deletes: [], params: {}, attributeNames: {} }, "sets")
 
   const setsString = sets.length ? `SET ${sets.join(", ")} ` : ""
   const addsString = adds.length ? `ADD ${adds.join(", ")} ` : ""
@@ -89,5 +90,6 @@ module.exports = (updates) => {
   return {
     UpdateExpression: `${setsString}${addsString}${deletesString}${removesString}`.trim(),
     ExpressionAttributeValues: params,
+    ExpressionAttributeNames: attributeNames
   }
 }
