@@ -1,5 +1,5 @@
 {
-  "name": "@mac/dynamo-merge",
+  "name": "@mac-/dynamo-merge",
   "version": "2.0.0",
   "description": "Painlessly update nested DynamoDB objects.",
   "main": "index.js",
