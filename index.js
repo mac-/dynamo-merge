@@ -56,12 +56,11 @@ const merge = (prefix, updates, accumulator, type, itemIndex = "") => {
     const isFromArray = Array.isArray(updates)
     const arr = isFromArray ? updates : Object.keys(updates)
 
-    var z = arr.reduce((prev, current, currentIndex) => {
+    return arr.reduce((prev, current, currentIndex) => {
       const value = isFromArray ? current : updates[current]
       const index = isFromArray ? currentIndex : ""
       return merge(getNextPrefix(prefix, current, isFromArray), value, newAcc, Array.isArray(value) ? "adds" : type, index)
     }, newAcc)
-    return z
   }
 
   const key = `:${prefix}${itemIndex}`.replace(/\./g, "_").replace(/^\:#/, ":")

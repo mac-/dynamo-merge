@@ -16,19 +16,12 @@
   "scripts": {
     "test": "node test.js",
     "coverage": "nyc yarn test",
-    "report": "nyc report --reporter=text-lcov",
-    "precommit": "lint-staged"
+    "report": "nyc report --reporter=text-lcov"
   },
   "devDependencies": {
     "codacy-coverage": "^2.0.2",
     "eslint-config-motley": "^8.0.1",
     "nyc": "^11.1.0",
     "tape": "^4.6.2"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --single-quote --trailing-comma all --write",
-      "git add"
-    ]
   }
 }
